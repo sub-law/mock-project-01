@@ -41,7 +41,7 @@ class ProductShowTest extends TestCase
         ]);
 
         $category = Category::where('name', 'ファッション')->first();
-        $showProduct->categories()->attach($category->id);
+        $showProduct->categories()->sync([$category->id]);
 
         Favorite::factory()->create([
             'user_id' => $favoriteUser->id,
@@ -92,6 +92,7 @@ class ProductShowTest extends TestCase
         $response = $this->get("/item/{$showProduct->id}");
 
         $response->assertStatus(200);
-        $response->assertSee('ファッション', 'アクセサリー');
+        $response->assertSee('ファッション');
+        $response->assertSee('アクセサリー');
     }
 }
