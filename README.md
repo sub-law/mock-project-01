@@ -38,6 +38,12 @@ php artisan db:seed
 ## Stripeの設定
 Stripeのテストキーを `.env` に記述してください（`.env.example` にも記載済みです）
 
+## キャッシュのクリア
+php artisan view:clear
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+
 ## テストケース確認コマンド
 全テスト：php artisan test
 ID1「会員登録機能」：php artisan test tests/Feature/RegisterTest.php
