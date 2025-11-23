@@ -43,7 +43,7 @@
 
             {{-- 商品の状態 --}}
             <label class="form-label" for="condition">商品の状態</label>
-            <select id="condition" name="condition" class="form-input">
+            <select id="condition" name="condition" class="form-select">
                 <option value="">選択してください</option>
                 @foreach(['良好','目立った傷や汚れなし','やや傷や汚れあり','状態が悪い'] as $cond)
                 <option value="{{ $cond }}" {{ old('condition') === $cond ? 'selected' : '' }}>{{ $cond }}</option>

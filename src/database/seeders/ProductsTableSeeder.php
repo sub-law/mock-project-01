@@ -34,7 +34,7 @@ class ProductsTableSeeder extends Seeder
         Product::create([
             'seller_id' => 1,
             'name' => '玉ねぎ3束',
-            'brand' => '',
+            'brand' => 'なし',
             'description' => '新鮮な玉ねぎ3束のセット',
             'image_path' => 'onion.jpg',
             'condition' => 'やや傷や汚れあり',
@@ -67,7 +67,7 @@ class ProductsTableSeeder extends Seeder
         Product::create([
             'seller_id' => 2,
             'name' => 'マイク',
-            'brand' => '',
+            'brand' => 'なし',
             'description' => '高音質のレコーディング用マイク',
             'image_path' => 'microphone.jpg',
             'condition' => '目立った傷や汚れなし',
@@ -89,7 +89,7 @@ class ProductsTableSeeder extends Seeder
         Product::create([
             'seller_id' => 2,
             'name' => 'タンブラー',
-            'brand' => '',
+            'brand' => 'なし',
             'description' => '使いやすいタンブラー',
             'image_path' => 'canteen.jpg',
             'condition' => '状態が悪い',
