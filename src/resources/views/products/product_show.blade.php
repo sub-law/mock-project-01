@@ -22,7 +22,7 @@
             <h1 class="product-title">{{ $product->name }}</h1>
             <div class="product-brand-group">
                 <span class="info-label">ブランド名</span>
-                <span class="product-brand">{{ $product->brand ?: '指定なし' }}</span>
+                <span class="product-brand">{{ $product->brand }}</span>
             </div>
 
             <p class="product-price">¥{{ number_format($product->price) }} <span class="tax-included">（税込）</span></p>

@@ -16,7 +16,7 @@ docker-compose up -d --build
 PHPコンテナに入る 
 docker-compose exec php bash
 
-Composer インストール 
+## Composer インストール 
 composer install
 
 ## Laravel初期設定
@@ -38,8 +38,14 @@ php artisan db:seed
 ## Stripeの設定
 Stripeのテストキーを `.env` に記述してください（`.env.example` にも記載済みです）
 
+## 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
+php artisan view:clear
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+
 ## テストケース確認コマンド
-全テスト：php artisan test
+全テスト：php artisan test tests/Feature
 ID1「会員登録機能」：php artisan test tests/Feature/RegisterTest.php
 ID2「ログイン機能」：php artisan test tests/Feature/LoginTest.php
 ID3「ログアウト機能」: php artisan test tests/Feature/LoginTest.php
@@ -59,43 +65,56 @@ ID16「メール認証機能」： php artisan test tests/Feature/EmailVerificat
 
 PHPコンテナから出る　Ctrl+D
 
-## ダミーデータ仕様
+### ダミーデータユーザー情報（3名）
 
-ダミーデータユーザー情報（3名）
-name:kiwi
-email:kiwi@example.com
-password:password
-出品数:5
+## 1
+name  kiwi
+email  kiwi@example.com
+password  password
+profile_image  kiwi.png
+postal_code  123-4567
+address  東京都足立区
+building_name  きのこビル101
+出品数:5 ('腕時計','HDD','玉ねぎ3束','革靴','ノートPC',)
 購入数:0
-お気に入り:全商品
-コメント:1(マイク)
+お気に入り:全商品(自身が出品した商品含む)
+コメント:1('マイク',)
 メール認証済み
 
-name:orange
-email:orange@example.com
-password:password
-出品数:5
-購入数:1(腕時計)
+## 2
+name  orange
+email  orange@example.com
+password  password
+profile_image  orange.png
+postal_code  123-4567
+address  東京都足立区
+building_name  きのこビル201
+出品数:5 ('マイク','ショルダーバッグ','タンブラー','コーヒーミル','メイクセット',)
+購入数:1('腕時計',)
 お気に入り:5(自身が出品した商品を除く全て)
-コメント:1(ノートPC)
+コメント:1('ノートPC',)
 メール未認証
 
-name:watermelon
-email:watermelon@example.com
-password:password
+## 3
+name  watermelon
+email  watermelon@example.com
+password password
+profile_image  watermelon.png
 出品数:0
 購入数:0
 お気に入り:全商品
-コメント:1(腕時計)
-メール未認証
+コメント:1('腕時計',)
 住所未登録
+メール未認証
 
 ## 補足（ユーザー仕様関連）
-- 新規登録ユーザーは、自身が出品した商品に対して「お気に入り」「コメント」機能を利用できません。
-- テストケースの検証意図：
-  - ID4：自分が出品した商品は一覧に表示されないことを確認
-  - ID5：いいねした商品だけが一覧に表示されることを確認
-- この検証のため、ユーザー「kiwi」には例外的に **自身が出品した商品にお気に入りステータスを付与**しています。
+新規登録ユーザーは、自身が出品した商品に対して「お気に入り」「コメント」機能を利用できません。
+
+##  ユーザー「kiwi」のお気に入りデータに関して
+テストケース
+  - ID4商品一覧取得：自分が出品した商品は一覧に表示されないことを確認
+  - ID5マイリスト一覧取得：いいねした商品だけが一覧に表示されることを確認
+上記のテストケース両方を満たす条件を検証するため、ユーザー「kiwi」には例外的に自身が出品した商品にお気に入りステータスを付与し、マイリストタブには自身が出品した商品は表示されないことを確認しています
 
 ## 主なルート一覧
 本プロジェクトのルート構成（URL・メソッド・ミドルウェア）は、別途提出するスプレッドシートに記載しています。  
@@ -107,20 +126,23 @@ password:password
 MySQL画面：http://localhost:8080
 mailhog認証画面：http://localhost:8025/
 
+### 画面仕様補足
+仕様書にはありませんが、ヘッダー部分のCOACHTECHのロゴをクリックすると商品一覧画面へ遷移します(運営に確認、了承済です)
+
 ### MailHogのメール認証手順
 1. 新規ユーザー登録を行う
 2. メール認証誘導画面に遷移、「認証はこちらから」のボタンをクリック
 3. 以下のURLから MailHog にアクセスするので、メール内容を確認してください  
    👉 [http://localhost:8025]
 4. 自身が登録したメール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックすると、認証が完了し、初回はプロフィール設定画面に遷移します
-※MailHogで認証リンクをクリックした際、1回目は反応しない場合があります。
-その際は一覧画面に戻り、再度リンクをクリックしてください。
+※MailHog画面内で認証リンクをクリックした際、1回目は反応しない場合があります。
+その際はメール一覧画面に戻り、再度メール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックしてください。
 
 ### stripeのテスト
-1. 購入画面でクレジットを選択し購入ボタンをクリックする
-2. カード番号4242 4242 4242 4242を入力、MM(月)/YY(年)・セキュリティコードは適当な3桁の数字を入力
-3. 名前は適当な名前を入力
-4. 支払うボタンをクリックする
+1. 購入画面で「カード支払い」を選択し購入ボタンをクリックする
+2. カード番号4242 4242 4242 4242を入力
+3. その他の項目(メールアドレス、名前など)は適当な値を入力
+4. 「支払う」ボタンをクリックする
 ## 補足（Stripe関連）
 StripeのCheckout画面では、カード番号以外の入力値（名前・メールアドレスなど）はサンドボックス環境ではバリデーションされません。 Laravel側で事前にユーザー情報や商品状態を確認し、購入完了後にDBへ記録することで、整合性を担保しています。
 

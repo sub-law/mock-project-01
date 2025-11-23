@@ -26,7 +26,8 @@ class ProductShowTest extends TestCase
         $favoriteUser = User::factory()->create(['email_verified_at' => now()]);
         $commentUser = User::factory()->create([
             'name' => 'コメント者',
-            'email_verified_at' => now()]);
+            'email_verified_at' => now()
+        ]);
         $viewer = User::factory()->create(['email_verified_at' => now()]);
 
         $showProduct = Product::factory()->create([
@@ -41,7 +42,7 @@ class ProductShowTest extends TestCase
         ]);
 
         $category = Category::where('name', 'ファッション')->first();
-        $showProduct->categories()->attach($category->id);
+        $showProduct->categories()->sync([$category->id]);
 
         Favorite::factory()->create([
             'user_id' => $favoriteUser->id,
@@ -92,6 +93,7 @@ class ProductShowTest extends TestCase
         $response = $this->get("/item/{$showProduct->id}");
 
         $response->assertStatus(200);
-        $response->assertSee('ファッション', 'アクセサリー');
+        $response->assertSee('ファッション');
+        $response->assertSee('アクセサリー');
     }
 }
